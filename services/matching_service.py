@@ -4,17 +4,62 @@ from utils.distance import haversine_distance
 from models.driver_status import DriverStatus
 from repository.driver_repository import DriverRespository
 
-MAX_RADIUS = 5
+
 
 class MatchingService:
+    
+    MAX_RADIUS = 5
     def __init__(
         self,
         h3_Service:H3Service,
-        store:MemoryStore
+        store:MemoryStore,
+        repository:DriverRespository
     ):
         self.h3_service = h3_Service
         self.store = store
+        self.repository = repository
         
+    
+    
+    
+    async def dispatch_driver(
+        self,
+        latitude:float,
+        longitude:float
+    ):
+        
+        passenger_cell = self.h3_service.get_cell(latitude,longitude)
+        
+        for radius in range(self.MAX_RADIUS+1):
+            cells = self.h3_service.get_neighbor_cells(passenger_cell,radius)
+            drivers = await self.repository.find_online_drivers_in_cell(cells)
+            if not drivers:
+                continue
+            
+            driver_distances = []
+            
+            for driver in drivers:
+                distance = haversine_distance(
+                    latitude,
+                    longitude,
+                    driver.latitude,
+                    driver.longitude
+                )
+                
+                driver_distances.append(
+                    (
+                        driver,
+                        distance
+                    )
+                )
+            driver_distances.sort(
+                key=lambda item:item[1]
+            )
+            
+            for driver,_ in driver_distances:
+                reserved = await self.repository.reserve_driver(driver.id)
+                if reserved:
+                    return driver
         
 
     def _find_best_driver_in_cells(
