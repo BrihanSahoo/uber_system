@@ -60,5 +60,19 @@ class DriverRespository:
                 )
             )
         return drivers
+    
+    
+    async def reserve_driver(self,driver_id:str)->bool:
+        
+        response = (
+            self.client.rpc(
+                "reserve_driver",
+                {
+                    "p_driver_id":driver_id
+                }
+            ).execute()
+        )
+        
+        return bool(response.data)
         
         
