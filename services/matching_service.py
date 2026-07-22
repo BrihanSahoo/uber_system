@@ -62,7 +62,7 @@ class MatchingService:
                     return driver
         
 
-    def _find_best_driver_in_cells(
+    def find_best_driver_in_cells(
         self,
         cells: list[str],
         passenger_lat: float,
@@ -112,7 +112,7 @@ class MatchingService:
         longitude,
         )
 
-        for radius in range(MAX_RADIUS + 1):
+        for radius in range(self.MAX_RADIUS + 1):
 
             candidate_cells = self.h3.get_neighbor_cells(
                 passenger_cell,
