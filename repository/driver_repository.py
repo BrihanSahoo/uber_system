@@ -13,7 +13,7 @@ class DriverRespository:
     ):
         self.client = client
     
-    async def get_drivers(
+    async def get_driver(
         self,
         driver_id:str
     ):
@@ -29,8 +29,14 @@ class DriverRespository:
         if not response.data:
             return None
         
-        return DriverLocation.model_validate(
-            response.data[0]
+        row = response.data[0]
+
+        return DriverLocation(
+            driver_id=row["id"],
+            latitude=row["latitude"],
+            longitude=row["longitude"],
+            cell_id=row["h3_cell"],
+            status=DriverStatus(row["status"]),
         )
     
     async def find_online_drivers_in_cell(
@@ -45,7 +51,7 @@ class DriverRespository:
             self.client
             .table("drivers")
             .select("*")
-            .eq("status",DriverStatus.ONLINE)
+            .eq("status",DriverStatus.ONLINE.value)
             .in_("h3_cell",cells)
             .execute()
         )
@@ -55,8 +61,12 @@ class DriverRespository:
         for row in response.data:
             
             drivers.append(
-                DriverLocation.model_validate(
-                    row
+                DriverLocation(
+                    driver_id=row["id"],
+                    latitude=row["latitude"],
+                    longitude=row["longitude"],
+                    cell_id=row["h3_cell"],
+                    status=DriverStatus(row["status"]),
                 )
             )
         return drivers
@@ -73,6 +83,6 @@ class DriverRespository:
             ).execute()
         )
         
-        return bool(response.data)
+        return (response.data) is True
         
         

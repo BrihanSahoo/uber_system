@@ -42,13 +42,13 @@ class MemoryStore:
         
         latitude:float,
         
-        longitude:str,
+        longitude:float,
         
         new_cell:str
     ):
         old_cell = driver.cell_id
         
-        self.cell_drivers[old_cell].remove(driver.driver_id)
+        self.cell_drivers[old_cell].discard(driver.driver_id)
         
         if not self.cell_drivers[old_cell]:
             del self.cell_drivers[old_cell]
@@ -72,7 +72,12 @@ class MemoryStore:
 
     ) -> set[str]:
 
-        return self.cell_drivers.get(
-            cell_id,
-            set()
+        return set(
+            self.cell_drivers.get(cell_id,set())
         )
+    
+    def remove_driver(self,driver_id:str):
+        self.cell_drivers.pop(driver_id)
+        self.drivers.pop(driver_id)
+        
+        

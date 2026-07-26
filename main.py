@@ -1,24 +1,18 @@
 from fastapi import FastAPI
 
 from services.driver_service import find_driver
+from routes.payment_routes import router as payment_router
 
 
 app = FastAPI()
 
 
 
-@app.get("/nearest-driver")
-def nearest_driver(
-    lat:float,
-    lon:float
-):
-
-    driver=find_driver(
-        lat,
-        lon
-    )
+app.include_router(payment_router)
 
 
+@app.get("/health")
+def root():
     return {
-        "driver":driver
+        "message":"working"
     }

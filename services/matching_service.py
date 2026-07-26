@@ -107,7 +107,7 @@ class MatchingService:
         longitude: float,
     ):
 
-        passenger_cell = self.h3.get_cell(
+        passenger_cell = self.h3_service.get_cell(
         latitude,
         longitude,
         )
@@ -119,7 +119,7 @@ class MatchingService:
                 radius,
             )
 
-            driver = self._find_best_driver_in_cells(
+            driver = self.find_best_driver_in_cells(
                 candidate_cells,
                 latitude,
                 longitude,
