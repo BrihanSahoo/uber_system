@@ -20,6 +20,8 @@ config = ConnectionConfig(
     VALIDATE_CERTS=True
 )
 
+fm = FastMail(config)
+
 
 async def send_welcome_email(name: str, email: EmailStr):
     html = f"""
@@ -78,7 +80,7 @@ async def send_welcome_email(name: str, email: EmailStr):
         subtype=MessageType.html
     )
 
-    fm = FastMail(config)
+    
     await fm.send_message(message)
     
 
@@ -146,7 +148,6 @@ async def send_password_reset_email(name: str, email: EmailStr, reset_link: str)
         subtype=MessageType.html
     )
 
-    fm = FastMail(config)
     await fm.send_message(message)
     
 async def send_ride_completed_email(
@@ -289,5 +290,4 @@ async def send_ride_completed_email(
         subtype=MessageType.html
     )
 
-    fm = FastMail(config)
     await fm.send_message(message)

@@ -3,6 +3,7 @@ from utils.hashing import hash_password
 from utils.jwt import create_access_token
 from repository.user_repository import UserRepository
 from pydantic import EmailStr
+from events.events import publish_event
 
 
 async def register(user:DataBaseUser):
@@ -14,6 +15,14 @@ async def register(user:DataBaseUser):
     if response:
         raise Exception("Phone number already exists.")
     response = await UserRepository.create_user(user)
+    
+    await publish_event(
+        "USER_REGISTERED",
+        {
+            "email":DataBaseUser.email,
+            "name":DataBaseUser.username
+        }
+    )
     
     access_token = create_access_token(
         {

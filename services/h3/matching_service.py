@@ -1,4 +1,4 @@
-from services.h3_service import H3Service
+from services.h3.h3_service import H3Service
 from storage.memory_store import MemoryStore
 from utils.distance import haversine_distance
 from models.driver_status import DriverStatus

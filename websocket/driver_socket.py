@@ -1,5 +1,5 @@
 from fastapi import APIRouter,WebSocket,WebSocketDisconnect
-from services.location_service import LocationService
+from services.h3.location_service import LocationService
 from websocket.connection_manager import ConnectionManager
 
 router = APIRouter()

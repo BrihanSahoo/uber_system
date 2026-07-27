@@ -1,5 +1,5 @@
 from models.driver import Driver
-from services.h3_service import H3Service
+from services.h3.h3_service import H3Service
 from storage.memory_store import MemoryStore
 from models.driver_location import DriverLocation
 

@@ -3,6 +3,7 @@ from services.user.login_service import login
 from services.user.register_service import register
 from pydantic import EmailStr
 from models.user import DataBaseUser
+from events import publish_events
 
 router = APIRouter(
     prefix="/user"
