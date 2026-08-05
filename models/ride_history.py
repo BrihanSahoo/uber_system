@@ -1,5 +1,9 @@
+from models.ride_status import RideStatus
 class RideHistory:
     id:str
+    rider_id:str
+    user_id:str
+    
     source_name:str
     destination_name:str
     
@@ -13,5 +17,6 @@ class RideHistory:
     
     cost:float
     distance:float
-    rider_id:str
-    user_id:str
+    
+    status:RideStatus = RideStatus.SEARCHING
+    
