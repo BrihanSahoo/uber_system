@@ -37,6 +37,19 @@ class UserRepository:
             return None
         return DataBaseUser(**response.data[0])
     
+    async def get_user_by_id(self,user_id:str):
+        response = (
+            self.client
+            .table("db_users")
+            .select("*")
+            .eq("id",user_id)
+            .limit(1)
+            .execute()
+        )
+        if not response.data:
+            return None
+        return DataBaseUser(**response.data[0])
+    
     async def get_user_by_phone(self,phone_numner:str):
         
         response = (
